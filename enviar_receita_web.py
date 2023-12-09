@@ -32,7 +32,7 @@ class Tratandorespostas:
             #response_json = json.loads(response.read().decode('utf-8'))
             #print(response_json)
             response_api = response_json
-            print('DIAS HABILITA DA WEB:' , response_api[0]['dias_semana'])
+            print('WEB:' , response_api)
             # Função para formatar as datas em cada item do JSON
             result = validar(response_api,dados_enviar)
             if result == True:
@@ -47,7 +47,7 @@ class Tratandorespostas:
             if result == "integrações atualizadas":
                 print("EMBARCADO E WEB ESTÃO SINCRONIZADOS COM A MESTA RECEITA REFERENTE A DATA/HORA")
                 return True
-            #print(content)
+            print(content)
         if response.status == 500:
             time.sleep(30)
             print("Erro 500 encontrado . Obtendo o conteúdo do erro...")
@@ -79,7 +79,7 @@ class GerenciadorEnviodados:
         dados_receita =  formatador.dados_receita(dados_receita)
         dados_equipamento = formatador.dados_cliente(dados_equipamento)
         dados_enviar = [{'dados_receita':dados_receita , 'id_quipamento':dados_equipamento}]
-        # print(dados_enviar)
+        print(dados_enviar)
         while erros < tentativas:
             try:
                 response = self.request.Post(dados_enviar)

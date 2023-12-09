@@ -9,7 +9,7 @@ class Formatador:
             'team_id':dado[2],
             'usuario':dado[3],
             'dados': json.loads(dado[4]),
-            'atualizado_em':str(dado[5]) if dado[5] is not None else None,
+            #'atualizado_em':str(dado[5]) if dado[5] is not None else None,
             'dados_online':json.loads(dado[6]),
             'status':dado[7]
             }
