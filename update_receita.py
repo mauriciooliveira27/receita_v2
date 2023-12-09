@@ -22,13 +22,14 @@ def validar(data,data_embarcado):
     # json_formatado = json.dumps(data, indent=4)
     # jsons = json.loads(json_formatado)
     criado_embarcado = data_embarcado[0]['dados_receita']['criado_em']
-    atualizado_embarcado = data_embarcado[0]['dados_receita']['atualizado_em']               
+    # atualizado_embarcado = data_embarcado[0]['dados_receita']['atualizado_em']               
     create_web = data[0]['criado_em']
     atualizado_web = data[0]['atualizado_em']
-    print(f"hora:embarcado:{atualizado_embarcado}")
+    print(criado_embarcado)
+    # print(f"hora:embarcado:{atualizado_embarcado}")
     print(f"hora criado web:{create_web}")
     print(f"hora atualizado web:{atualizado_web}")
-    if atualizado_embarcado < atualizado_web:
+    if criado_embarcado < atualizado_web:
         atualizar_dias_habilita(data)
         print("WEB MAIS ATUAL")
         return True
@@ -70,26 +71,35 @@ def atualizar_dias_habilita(jsons):
                 temp_max = 0
 
         if 'hora_inicial' in item:
-            hora_inicial_str = jsons[0]['hora_inicial']
-            hora_inicial = int(datetime.strptime(hora_inicial_str, "%H:%M:%S").strftime("%H"))
-            
+            if 'hora_inicial' in item != None:
+                hora_inicial_str = jsons[0]['hora_inicial']
+                hora_inicial = int(datetime.strptime(hora_inicial_str, "%H:%M:%S").strftime("%H"))
+            else:
+                hora_inicial = 0
 
-        if 'hora_inicial' in item:
+        if 'hora_inicial' in item != None:
             min_inicial_str = jsons[0]['hora_inicial']
             min_inicial = int(datetime.strptime(min_inicial_str, "%H:%M:%S").strftime("%M"))
-            print(min_inicial)
+        else:
+            min_inicial = 0
 
-        if 'hora_final' in item:
+        if 'hora_final' in item != None:
             hora_final_str = jsons[0]['hora_final']
             hora_final = int(datetime.strptime(hora_final_str, "%H:%M:%S").strftime("%H"))
-        
-        if 'hora_final' in item:
+        else:
+            hora_final = 0
+
+        if 'hora_final' in item != None:
             hora_final_str = jsons[0]['hora_final']
             min_final = int(datetime.strptime(hora_final_str, "%H:%M:%S").strftime("%M"))
-            print(min_final)
+        else:
+            min_final = 0
 
         if 'considerar_chuva' in item:
-            considerar_chuva = jsons[0]['considerar_chuva']
+            if 'considerar_chuva' in item != None:
+                considerar_chuva = jsons[0]['considerar_chuva']
+            else:
+                considerar_chuva = 0
 
         if 'umidade_minima' in item:
             if jsons[0]['umidade_minima'] != None:

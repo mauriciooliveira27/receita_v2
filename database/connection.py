@@ -73,7 +73,7 @@ class MysqlConnection:
 
             query = """
                         UPDATE receita_aeracao
-                        SET atualizada_em = %s, dados_usuario = JSON_SET(
+                        SET criada_em = %s, dados_usuario = JSON_SET(
                             dados_usuario,
                             '$.intervaloTemp_temp_min', %s,
                             '$.intervaloTemp_temp_max', %s,
