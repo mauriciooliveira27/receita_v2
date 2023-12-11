@@ -10,10 +10,10 @@ class MysqlConnection:
         while True:
             try:
                 self.__connection = mysql.connector.connect(
-                    host = "192.168.15.231",
-                    user = "scada",
-                    password = "termometria",
-                    db = "Termometria"
+                    host = "192.168.237.68",
+                    user = "mauricio",
+                    password = "mauricio",
+                    db = "TESTE2"
                 ) 
                 if self.__connection.is_connected():
                     print("conected.")
@@ -65,16 +65,43 @@ class MysqlConnection:
             raise QueryError(f"erro in query: {e}")
         finally:
             cursor.close()
-    def set_query_receita_web(self,atualizada_em,temp_min,temp_max,hora_ini,min_inicial,min_fin,hora_fin,dom, seg, ter, quar, quin, sex, sab,chuva,um_min,um_max,po):
+    def set_query_receita_web(self,
+                                atualizada_em,
+                                intervaloTemp_habilita,
+                                intervaloHorario_habilita,
+                                chuva_habilita,
+                                umidade_habilita,
+                                pontoOrvalho_habilita,
+                                temp_min,
+                                temp_max,
+                                hora_ini,
+                                min_inicial,
+                                min_fin,
+                                hora_fin,dom, 
+                                seg, ter, quar, 
+                                quin, 
+                                sex, 
+                                sab,
+                                chuva,
+                                um_min,
+                                um_max,
+                                po):
+                            
         if not self.__connection.is_connected or self.__connection is None:
             self.__connection = self.__conect()
         cursor  = self.__connection.cursor(dictionary=True)
+        
         try:
 
             query = """
                         UPDATE receita_aeracao
-                        SET criada_em = %s, dados_usuario = JSON_SET(
+                        SET team_id = 'importado_web', usuario = 'importado_web ', criada_em = %s, dados_usuario = JSON_SET(
                             dados_usuario,
+                            '$.intervaloTemp_habilita', %s,
+                            '$.intervaloHorario_habilita', %s,
+                            '$.chuva_habilita', %s,
+                            '$.umidade_habilita',%s,
+                            '$.pontoOrvalho_habilita', %s,
                             '$.intervaloTemp_temp_min', %s,
                             '$.intervaloTemp_temp_max', %s,
                             '$.intervaloHorario_hora_inicial', %s,
@@ -96,10 +123,11 @@ class MysqlConnection:
                         )
                         WHERE codigo order by codigo desc limit 1;
                     """
-            paremetro =  (atualizada_em,temp_min,temp_max,hora_ini,min_inicial,min_fin,hora_fin,dom,seg, ter, quar, quin, sex, sab,chuva,um_min,um_max,po)
+            paremetro =  (atualizada_em,intervaloTemp_habilita,intervaloHorario_habilita,chuva_habilita,umidade_habilita,pontoOrvalho_habilita,temp_min,temp_max,hora_ini,min_inicial,min_fin,hora_fin,dom,seg, ter, quar, quin, sex, sab,chuva,um_min,um_max,po)
             cursor.execute(query,paremetro)
             self.__connection.commit()
         except mysql.connector.Error as e:
+            print(e)
             raise QueryError(f"Erro in querying{e}")
         finally:
             cursor.close()
