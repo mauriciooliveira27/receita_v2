@@ -10,10 +10,10 @@ class MysqlConnection:
         while True:
             try:
                 self.__connection = mysql.connector.connect(
-                    host = "192.168.237.68",
-                    user = "mauricio",
-                    password = "mauricio",
-                    db = "TESTE2"
+                    host = "",
+                    user = "",
+                    password = "",
+                    db = ""
                 ) 
                 if self.__connection.is_connected():
                     print("conected.")
