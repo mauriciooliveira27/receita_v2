@@ -6,6 +6,8 @@ import time
 from database import MysqlConnection
 from datetime import datetime
 from update_receita import validar
+
+erros = 0
 class Request:
     def __init__(self, host,endpoint):
         self.host = host
@@ -20,9 +22,10 @@ class Request:
 
 class Tratandorespostas:
  
-
     def tratar_resposta(self, response):
-        global response_api, erros
+        global response_api
+        
+
         content_type = response.headers.get('Content-Type', '')
         if 'application/json' in content_type:
             response_json = json.loads(response.read().decode('utf-8'))
@@ -32,7 +35,8 @@ class Tratandorespostas:
             #response_json = json.loads(response.read().decode('utf-8'))
             #print(response_json)
             response_api = response_json
-            print('WEB:' , response_api)
+            print(response_api)
+            #print('WEB:' , response_api)
             # Função para formatar as datas em cada item do JSON
             result = validar(response_api,dados_enviar)
             if result == True:
@@ -49,26 +53,25 @@ class Tratandorespostas:
                 return True
             print(content)
         if response.status == 500:
-            time.sleep(30)
+            # time.sleep(30)
             print("Erro 500 encontrado . Obtendo o conteúdo do erro...")
             content = response.read()
             print(content)
             db = MysqlConnection()
             db.set_query(error_status500())
-            erros += 1
-        
+            
+            return content_type
         elif response.status == 404:
-            time.sleep(30)
+            # time.sleep(30)
             db = MysqlConnection()
             db.set_query(error_status404())
             print("Erro 404: recurso não encontrado . Verifique se a URL ou a rota está corre.")
-            erros += 1
-    
+            
+            return content_type
 class GerenciadorEnviodados:
     def enviar_dados_receita(self):
         global dados_enviar
-        self.request = Request('api.tisinapse.com.br','/publico/integracao/unidade-armazenamento/configuracao-receita')
-        erros = 0
+        self.request = Request('api.tisinapse.com.br','/publico/integracao/unidade-armazenamento/configuracao-recea')
         tentativas = 5
         tratamento = Tratandorespostas()
         formatador = Formatador()
@@ -87,31 +90,28 @@ class GerenciadorEnviodados:
                 break
                 
             except http.client.HTTPException as e :
-                time.sleep(30)
+                # time.sleep(30)
                 db.set_query(error_http_exception())
-                erros += 1
             except ConnectionError as e:
-                time.sleep(30)
+                # time.sleep(30)
                 db.set_query(error_connection())
-                erros += 1
             except TimeoutError as e:
-                time.sleep(30)
+                # time.sleep(30)
                 db.set_query(error_timeout())
-                erros += 1
             except json.JSONDecodeError as e:
-                time.sleep(30)
+                # time.sleep(30)
                 db.set_query(error_json_decode())
-                erros +=1
+               
             except Exception as e:
-                time.sleep(30)
+                print(e)
+                # time.sleep(30)
                 db.set_query(error_Except())
-                erros += 1
-            
-          
 
 
 while True:
+    print("fora while")
     gerenciador = GerenciadorEnviodados()
     gerenciador.enviar_dados_receita()
-    time.sleep(5)
+    time.sleep(60)
+ 
     
