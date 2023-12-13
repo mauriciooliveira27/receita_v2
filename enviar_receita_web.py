@@ -71,7 +71,7 @@ class Tratandorespostas:
 class GerenciadorEnviodados:
     def enviar_dados_receita(self):
         global dados_enviar
-        self.request = Request('api.tisinapse.com.br','/publico/integracao/unidade-armazenamento/configuracao-recea')
+        self.request = Request('api.sinapse.com','/publico/integracao/unidade-armazenamento/configuracao-receita')
         tentativas = 5
         tratamento = Tratandorespostas()
         formatador = Formatador()
@@ -112,6 +112,6 @@ while True:
     print("fora while")
     gerenciador = GerenciadorEnviodados()
     gerenciador.enviar_dados_receita()
-    time.sleep(60)
+    time.sleep(3)
  
     
