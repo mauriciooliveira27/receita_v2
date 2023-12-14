@@ -52,6 +52,8 @@ class Tratandorespostas:
                 print("EMBARCADO E WEB ESTÃO SINCRONIZADOS COM A MESTA RECEITA REFERENTE A DATA/HORA")
                 return True
             print(content)
+        
+           
         if response.status == 500:
             # time.sleep(30)
             print("Erro 500 encontrado . Obtendo o conteúdo do erro...")
@@ -71,7 +73,7 @@ class Tratandorespostas:
 class GerenciadorEnviodados:
     def enviar_dados_receita(self):
         global dados_enviar
-        self.request = Request('api.sinapse.com','/publico/integracao/unidade-armazenamento/configuracao-receita')
+        self.request = Request('api.sinapsesolucoes.com','/publico/integracao/unidade-armazenamento/configuracao-receita')
         tentativas = 5
         tratamento = Tratandorespostas()
         formatador = Formatador()
