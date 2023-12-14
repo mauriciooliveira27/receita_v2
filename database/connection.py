@@ -10,10 +10,10 @@ class MysqlConnection:
         while True:
             try:
                 self.__connection = mysql.connector.connect(
-                    host = "localhost",
-                    user = "leitor_termo",
-                    password = "termometria",
-                    db = "Termometria"
+                    host = "192.1689.237.68",
+                    user = "mauricio",
+                    password = "mauricio",
+                    db = "TESTE2"
                 ) 
                 if self.__connection.is_connected():
                     print("conected.")
@@ -97,28 +97,28 @@ class MysqlConnection:
                         UPDATE receita_aeracao
                         SET team_id = 'importado_web', usuario = 'importado_web ', criada_em = %s, dados_usuario = JSON_SET(
                             dados_usuario,
-                            '$.intervaloTemp_habilita', %s,
-                            '$.intervaloHorario_habilita', %s,
-                            '$.chuva_habilita', %s,
+                            '$.intervaloTemp_habilita',%s,
+                            '$.intervaloHorario_habilita',%s,
+                            '$.chuva_habilita',%s,
                             '$.umidade_habilita',%s,
-                            '$.pontoOrvalho_habilita', %s,
-                            '$.intervaloTemp_temp_min', %s,
-                            '$.intervaloTemp_temp_max', %s,
-                            '$.intervaloHorario_hora_inicial', %s,
+                            '$.pontoOrvalho_habilita',%s,
+                            '$.intervaloTemp_temp_min',%s,
+                            '$.intervaloTemp_temp_max',%s,
+                            '$.intervaloHorario_hora_inicial',%s,
                             '$.intervaloHorario_minuto_inicial',%s,
-                            '$.intervaloHorario_hora_final', %s,
+                            '$.intervaloHorario_hora_final',%s,
                             '$.intervaloHorario_minuto_final',%s,
-                            '$.intervaloHorario_habilita_domingo', %s,
-                            '$.intervaloHorario_habilita_segunda', %s,
-                            '$.intervaloHorario_habilita_terca', %s,
-                            '$.intervaloHorario_habilita_quarta', %s,
-                            '$.intervaloHorario_habilita_quinta', %s,
-                            '$.intervaloHorario_habilita_sexta', %s,
-                            '$.intervaloHorario_habilita_sabado', %s,
-                            '$.chuva_habilita', %s,
-                            '$.umidade_min_valor', %s,
-                            '$.umidade_max_valor', %s,
-                            '$.pontoOrvalho_temp_ponto_orvalho', %s
+                            '$.intervaloHorario_habilita_domingo',%s,
+                            '$.intervaloHorario_habilita_segunda',%s,
+                            '$.intervaloHorario_habilita_terca',%s,
+                            '$.intervaloHorario_habilita_quarta',%s,
+                            '$.intervaloHorario_habilita_quinta',%s,
+                            '$.intervaloHorario_habilita_sexta',%s,
+                            '$.intervaloHorario_habilita_sabado',%s,
+                            '$.chuva_habilita',%s,
+                            '$.umidade_min_valor',%s,
+                            '$.umidade_max_valor',%s,
+                            '$.pontoOrvalho_temp_ponto_orvalho',%s
                          
                         )
                         WHERE codigo order by codigo desc limit 1;

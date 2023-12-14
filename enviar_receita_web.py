@@ -114,6 +114,6 @@ while True:
     print("fora while")
     gerenciador = GerenciadorEnviodados()
     gerenciador.enviar_dados_receita()
-    time.sleep(60)
+    time.sleep(1)
  
     

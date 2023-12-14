@@ -65,14 +65,14 @@ def atualizar_dias_habilita(jsons):
             temp_min = float(jsons[0]['temperatura_minima'])
             intervaloTemp_habilita = 1
         else:
-            temp_min = None
+            temp_min = 0
             intervaloTemp_habilita = 0
 
         if 'temperatura_maxima' in item and item['temperatura_maxima'] is not None:
             temp_max = float(jsons[0]['temperatura_maxima'])
             intervaloTemp_habilita = 1
         else:
-            temp_max = None
+            temp_max = 0
             intervaloTemp_habilita = 0
 
 
@@ -82,7 +82,7 @@ def atualizar_dias_habilita(jsons):
             hora_inicial = int(datetime.strptime(hora_inicial_str, "%H:%M:%S").strftime("%H"))
             intervaloHorario_habilita = 1
         else:
-            hora_inicial = None
+            hora_inicial = 0
             intervaloHorario_habilita = 0
 
 
@@ -92,7 +92,7 @@ def atualizar_dias_habilita(jsons):
             intervaloHorario_habilita = 1
 
         else:
-            min_inicial = None
+            min_inicial = 0
             intervaloHorario_habilita = 0
 
 
@@ -102,7 +102,7 @@ def atualizar_dias_habilita(jsons):
             hora_final = int(datetime.strptime(hora_final_str, "%H:%M:%S").strftime("%H"))
             intervaloHorario_habilita = 1
         else:
-            hora_final = None
+            hora_final = 0
             intervaloHorario_habilita = 0
 
 
@@ -113,7 +113,7 @@ def atualizar_dias_habilita(jsons):
             intervaloHorario_habilita = 1
         else:
             min_final = 0
-            intervaloHorario_habilita = 0##########
+            intervaloHorario_habilita = 0
 
 
 
@@ -121,8 +121,8 @@ def atualizar_dias_habilita(jsons):
             considerar_chuva = jsons[0]['considerar_chuva']
             chuva_habilita = 1
         else:
-            considerar_chuva = None
-            chuva_habilita = 0###########333333
+            considerar_chuva = 0
+            chuva_habilita = 0
 
 
 
@@ -130,8 +130,8 @@ def atualizar_dias_habilita(jsons):
             umidade_minima = float(jsons[0]['umidade_minima'])
             umidade_habilita = 1
         else:
-            umidade_minima = None
-            umidade_habilita = 0#############
+            umidade_minima = 0
+            umidade_habilita = 0
 
 
 
@@ -139,15 +139,15 @@ def atualizar_dias_habilita(jsons):
                 umidade_maxima = jsons[0]['umidade_maxima']
                 umidade_habilita = 1
         else:
-            umidade_maxima = None
+            umidade_maxima = 0
             umidade_habilita = 0
 
         if 'ponto_orvalho' in item and item['ponto_orvalho'] is not None:
             ponto_orvalho = jsons[0]['ponto_orvalho']
             pontoOrvalho_habilita = 0
         else:
-            ponto_orvalho = None
-            pontoOrvalho_habilita = 0####
+            ponto_orvalho = 0
+            pontoOrvalho_habilita = 0
         
 
    
