@@ -92,21 +92,21 @@ class GerenciadorEnviodados:
                 break
                 
             except http.client.HTTPException as e :
-                # time.sleep(30)
+                time.sleep(30)
                 db.set_query(error_http_exception())
             except ConnectionError as e:
-                # time.sleep(30)
+                time.sleep(30)
                 db.set_query(error_connection())
             except TimeoutError as e:
-                # time.sleep(30)
+                time.sleep(30)
                 db.set_query(error_timeout())
             except json.JSONDecodeError as e:
-                # time.sleep(30)
+                time.sleep(30)
                 db.set_query(error_json_decode())
                
             except Exception as e:
                 print(e)
-                # time.sleep(30)
+                time.sleep(30)
                 db.set_query(error_Except())
 
 
@@ -114,6 +114,6 @@ while True:
     print("fora while")
     gerenciador = GerenciadorEnviodados()
     gerenciador.enviar_dados_receita()
-    time.sleep(3)
+    time.sleep(60)
  
     
