@@ -1,53 +1,47 @@
 import http.client 
 import json
-from consulta import Formatador
-from query_database import *
+from .query import Formatador
+from .query_database import *
 import time
-from database import MysqlConnection
+from .database import MysqlConnection
 from datetime import datetime
-from update_receita import validar
+from .update_revenue import validar
 
 erros = 0
 class Request:
     def __init__(self, host,endpoint):
-        self.host = host
-        self.endpoint = endpoint
+        self.host       =       host
+        self.endpoint   =       endpoint
         
     def Post(self, dados_receita):
         global conn
-        conn = http.client.HTTPSConnection(self.host)
-        DadosJsonReceita = json.dumps(dados_receita)
+        conn                =       http.client.HTTPSConnection(self.host)
+        DadosJsonReceita    =       json.dumps(dados_receita)
         conn.request('POST', self.endpoint, DadosJsonReceita, headers={'Content-Type':'application/json'})
         return conn.getresponse()
 
-class Tratandorespostas:
+class TreatingResponses:
  
     def tratar_resposta(self, response):
         global response_api
-        
+        content_type            =       response.headers.get('Content-Type', '')
 
-        content_type = response.headers.get('Content-Type', '')
         if 'application/json' in content_type:
-            response_json = json.loads(response.read().decode('utf-8'))
+            response_json       =       json.loads(response.read().decode('utf-8'))
+            response_api        =       response_json
+            result              =       validar(response_api,dados_enviar)
 
-            #print(f"Unexpected content type: {content_type}")
-            #print(response.status, response.reason)
-            #response_json = json.loads(response.read().decode('utf-8'))
-            #print(response_json)
-            response_api = response_json
-            print(response_api)
-            #print('WEB:' , response_api)
-            # Função para formatar as datas em cada item do JSON
-            result = validar(response_api,dados_enviar)
             if result == True:
                 print("web mais atual , atualiando embarcado")
                 time.sleep(5)
                 print("embarcado atualizado.")
                 content = response.read()
                 return True
+            
             if result == False:
                 print("embarcado mais atual")
                 return False
+            
             if result == "integrações atualizadas":
                 print("EMBARCADO E WEB ESTÃO SINCRONIZADOS COM A MESTA RECEITA REFERENTE A DATA/HORA")
                 return True
@@ -70,25 +64,27 @@ class Tratandorespostas:
             print("Erro 404: recurso não encontrado . Verifique se a URL ou a rota está corre.")
             
             return content_type
-class GerenciadorEnviodados:
+class Main:
+
     def enviar_dados_receita(self):
         global dados_enviar
-        self.request = Request('api.sinapsesolucoes.com','/publico/integracao/unidade-armazenamento/configuracao-receita')
-        tentativas = 5
-        tratamento = Tratandorespostas()
-        formatador = Formatador()
-        db = MysqlConnection()
-        dados_receita = db.get_query_receita()
-        dados_equipamento = db.get_query_id_equipamento()
-
-        dados_receita =  formatador.dados_receita(dados_receita)
-        dados_equipamento = formatador.dados_cliente(dados_equipamento)
-        dados_enviar = [{'dados_receita':dados_receita , 'id_quipamento':dados_equipamento}]
-        print(dados_enviar)
+        self.request        =       Request('api.sinapsesolucoes.com','/publico/integracao/unidade-armazenamento/configuracao-receita')
+        tentativas          =       5
+        tratamento          =       TreatingResponses()
+        formatador          =       Formatador()
+        db                  =       MysqlConnection()
+        dados_receita       =       db.get_query_receita()
+        dados_equipamento   =       db.get_query_id_equipamento()
+        dados_receita       =       formatador.dados_receita(dados_receita)
+        dados_equipamento   =       formatador.dados_cliente(dados_equipamento)
+        dados_enviar        =       [{'dados_receita':dados_receita , 'id_quipamento':dados_equipamento}]
+  
         while erros < tentativas:
             try:
-                response = self.request.Post(dados_enviar)
-                content = tratamento.tratar_resposta(response)
+                response    =       self.request.Post(dados_enviar)
+                print(dados_enviar)
+                content     =       tratamento.tratar_resposta(response)
+                print('enviando')
                 break
                 
             except http.client.HTTPException as e :
@@ -109,11 +105,18 @@ class GerenciadorEnviodados:
                 time.sleep(30)
                 db.set_query(error_Except())
 
+    
+    def run(self):
+        while True:
+            self.enviar_dados_receita()
 
-while True:
-    print("fora while")
-    gerenciador = GerenciadorEnviodados()
-    gerenciador.enviar_dados_receita()
-    time.sleep(1)
  
     
+class App:
+
+    def __init__(self) -> None:
+        self.app = Main()
+
+    @classmethod
+    def execute(cls):
+        cls().app.run()
